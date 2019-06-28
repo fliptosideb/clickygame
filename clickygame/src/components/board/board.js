@@ -3,13 +3,6 @@ import React, { Component } from 'react';
 import MoviePoster from './moviePoster';
 import Score from './score';
 
-const shuffle = arr => (
-arr
-.map(a => [Math.random(), a])
-.sort((a,b) => a[0] - b[0])
-.map(a => a[1])
-);
-
 const posters = [
     {
         name: 'adaptation',
@@ -73,48 +66,57 @@ const posters = [
     }
 ]
 
+const shuffle = arr => (
+    arr
+        .map(a => [Math.random(), a])
+        .sort((a, b) => a[0] - b[0])
+        .map(a => a[1])
+);
+
+
 export default class Board extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
             user: {
                 score: 0
             },
-            movies: shuffle( posters )
+            movies: shuffle(posters)
         };
     }
 
-onMovieClick = ( index ) => {
-    if ( !this.state.movies[index].clicked ) {
-        this.setState ({
-            movies: shuffle( this.state.movies.map( (movie, current) => {
-                return ( current === index ) ? { ...movie, clicked: true } : movie
-            })),
-            user: {
-                ...this.state.user,
-                score: this.state.user.score + 1
-            }
-        });
-    } else {
-        this.setState({
-            movies: shuffle( this.state.movies.map( movie => { return { ...movie, clicked: false}})),
-        user: {
-            ...this.state.user,
-            score: 0
+    onMovieClick = (index) => {
+        if (!this.state.movies[index].clicked) {
+            this.setState({
+                movies: shuffle(this.state.movies.map((movie, current) => {
+                    return (current === index) ? { ...movie, clicked: true } : movie
+                })),
+                user: {
+                    ...this.state.user,
+                    score: this.state.user.score + 1
+                }
+            });
+        } else {
+            this.setState({
+                movies: shuffle(this.state.movies.map(movie => { return { ...movie, clicked: false } })),
+                user: {
+                    ...this.state.user,
+                    score: 0
+                }
+            });
         }
-        });
     }
-}
 
-render() {
-    return (
-        <div>
-            <h4> Pick a movie only once.</h4>
-            <Score score={this.state.user.score} />
-            <MoviePoster movies={this.state.movies} onMovieClick={this.onMovieClick} />
-        </div>
-    )
-}
+    render() {
+        return (
+            <div className="center">
+                <h4> There are 12 movies. Pick a movie only once.</h4>
+                <h4>If you pick the same movie twice, the score resets.</h4>
+                <Score score={this.state.user.score} />
+                <MoviePoster movies={this.state.movies} onMovieClick={this.onMovieClick} />
+            </div>
+        )
+    }
 
 
 }
