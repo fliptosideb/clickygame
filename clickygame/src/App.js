@@ -10,11 +10,9 @@ class App extends Component {
       <>
         <Header />
         <Board />
-
       </>
     )
   }
-
 }
 
 export default App;
